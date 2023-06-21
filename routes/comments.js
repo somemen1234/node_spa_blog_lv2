@@ -89,18 +89,22 @@ router.put("/posts/:postId/comments/:commentId", authMiddleware, async (req, res
     if (!existComment)
       return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
 
+    if (postId !== existComment.postId)
+      return res.status(404).json({
+        success: false,
+        errorMessage: "검색한 게시물과 수정할 댓글의 게시물이 일치하지 않습니다.",
+      });
+
     if (userId !== existComment.userId)
       return res
         .status(403)
         .json({ success: false, errorMessage: "댓글의 수정 권한이 존재하지 않습니다." });
 
     if (!content)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          errorMessage: "댓글이 비어 있습니다. 수정할 댓글을 입력해주세요.",
-        });
+      return res.status(400).json({
+        success: false,
+        errorMessage: "댓글이 비어 있습니다. 수정할 댓글을 입력해주세요.",
+      });
 
     await Comment.updateOne({ _id: commentId }, { $set: { content: content } });
     res.status(201).json({ success: true, message: "댓글을 수정하였습니다." });
@@ -129,6 +133,12 @@ router.delete("/posts/:postId/comments/:commentId", authMiddleware, async (req, 
 
     if (!existComment)
       return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
+
+    if (postId !== existComment.postId)
+      return res.status(404).json({
+        success: false,
+        errorMessage: "검색한 게시물과 수정할 댓글의 게시물이 일치하지 않습니다.",
+      });
 
     if (userId !== existComment.userId)
       return res

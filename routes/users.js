@@ -9,6 +9,14 @@ router.post("/signup", async (req, res) => {
     const { nickname, password, confirmPassword } = req.body;
     let nicknameReg = new RegExp(/^[\w]{3,12}$/g);
 
+    if (!nickname || !password || !confirmPassword) {
+      res.status(412).json({
+        success: false,
+        errorMessage: "닉네임, 비밀번호, 비밀번호 확인을 전부 입력해 주세요.",
+      });
+      return;
+    }
+
     if (!nicknameReg.test(nickname)) {
       res.status(412).json({
         success: false,
