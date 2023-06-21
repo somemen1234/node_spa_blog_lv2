@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Post = require("../schemas/post.js");
+const Comment = require("../schemas/comment.js");
 const authMiddleware = require("../middlewares/auth-middleware.js");
 //ObjectId의 타입을 활용하기 위해 할당
 const { ObjectId } = require("mongoose").Types;
@@ -139,7 +140,7 @@ router.delete("/posts/:postId", checkObjectId, authMiddleware, async (req, res) 
         .json({ success: false, message: "게시글 삭제 권한이 존재하지 않습니다." });
 
     await Post.deleteOne(existPost);
-
+    await Comment.deleteMany({ postId });
     return res.status(200).json({ success: true, message: "게시글을 삭제하였습니다." });
   } catch (error) {
     return res.status(400).json({ success: false, message: "게시글 삭제에 실패했습니다." });
