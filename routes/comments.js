@@ -22,7 +22,7 @@ router.get("/posts/:postId/comments", checkObjectId, async (req, res) => {
     if (findComments.length === 0)
       return res
         .status(404)
-        .json({ success: false, message: "해당 게시글의 댓글을 찾을 수 없습니다." });
+        .json({ success: false, errorMessage: "해당 게시글의 댓글을 찾을 수 없습니다." });
 
     let results = findComments.map((comment) => {
       return {
@@ -37,7 +37,7 @@ router.get("/posts/:postId/comments", checkObjectId, async (req, res) => {
 
     res.status(200).json({ success: true, comments: results });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "댓글 조회에 실패하였습니다." });
+    return res.status(400).json({ success: false, errorMessage: "댓글 조회에 실패하였습니다." });
   }
 });
 
@@ -51,15 +51,19 @@ router.post("/posts/:postId/comments", checkObjectId, authMiddleware, async (req
 
     const existComment = await Post.findById(postId);
     if (!existComment)
-      return res.status(404).json({ success: false, message: "해당 게시글을 찾을 수 없습니다." });
+      return res
+        .status(404)
+        .json({ success: false, errorMessage: "해당 게시글을 찾을 수 없습니다." });
 
     if (!content)
-      return res.status(412).json({ success: false, message: "댓글 정보가 입력되지 않았습니다." });
+      return res
+        .status(412)
+        .json({ success: false, errorMessage: "댓글 정보가 입력되지 않았습니다." });
 
     await Comment.create({ postId: existComment._id, userId, nickname, content });
     res.status(201).json({ success: true, message: "댓글을 생성하였습니다." });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "댓글 작성에 실패헀습니다." });
+    return res.status(400).json({ success: false, errorMessage: "댓글 작성에 실패헀습니다." });
   }
 });
 
@@ -72,31 +76,36 @@ router.put("/posts/:postId/comments/:commentId", authMiddleware, async (req, res
     const { content } = req.body;
 
     if (!ObjectId.isValid(commentId) || !ObjectId.isValid(postId))
-      return res.status(412).json({ success: false, message: "데이터 형식이 올바르지 않습니다." });
+      return res
+        .status(412)
+        .json({ success: false, errorMessage: "데이터 형식이 올바르지 않습니다." });
 
     const existComment = await Comment.findById(commentId);
     const existPost = await Post.findById(postId);
 
     if (!existPost)
-      return res.status(404).json({ success: false, message: "게시글이 존재하지 않습니다." });
+      return res.status(404).json({ success: false, errorMessage: "게시글이 존재하지 않습니다." });
 
     if (!existComment)
-      return res.status(404).json({ success: false, message: "댓글이 존재하지 않습니다." });
+      return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
 
     if (userId !== existComment.userId)
       return res
         .status(403)
-        .json({ success: false, message: "댓글의 수정 권한이 존재하지 않습니다." });
+        .json({ success: false, errorMessage: "댓글의 수정 권한이 존재하지 않습니다." });
 
     if (!content)
       return res
         .status(400)
-        .json({ success: false, message: "댓글이 비어 있습니다. 수정할 댓글을 입력해주세요." });
+        .json({
+          success: false,
+          errorMessage: "댓글이 비어 있습니다. 수정할 댓글을 입력해주세요.",
+        });
 
     await Comment.updateOne({ _id: commentId }, { $set: { content: content } });
     res.status(201).json({ success: true, message: "댓글을 수정하였습니다." });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "댓글 수정에 실패했습니다." });
+    return res.status(400).json({ success: false, errorMessage: "댓글 수정에 실패했습니다." });
   }
 });
 
@@ -108,16 +117,18 @@ router.delete("/posts/:postId/comments/:commentId", authMiddleware, async (req, 
     const { commentId } = req.params;
 
     if (!ObjectId.isValid(commentId) || !ObjectId.isValid(postId))
-      return res.status(412).json({ success: false, message: "데이터 형식이 올바르지 않습니다." });
+      return res
+        .status(412)
+        .json({ success: false, errorMessage: "데이터 형식이 올바르지 않습니다." });
 
     const existComment = await Comment.findById(commentId);
     const existPost = await Post.findById(postId);
 
     if (!existPost)
-      return res.status(404).json({ success: false, message: "게시글이 존재하지 않습니다." });
+      return res.status(404).json({ success: false, errorMessage: "게시글이 존재하지 않습니다." });
 
     if (!existComment)
-      return res.status(404).json({ success: false, message: "댓글이 존재하지 않습니다." });
+      return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
 
     if (userId !== existComment.userId)
       return res
@@ -127,7 +138,7 @@ router.delete("/posts/:postId/comments/:commentId", authMiddleware, async (req, 
     await Comment.deleteOne(existComment);
     return res.status(200).json({ success: true, message: "댓글을 삭제하였습니다." });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "댓글 삭제에 실패했습니다." });
+    return res.status(400).json({ success: false, errorMessage: "댓글 삭제에 실패했습니다." });
   }
 });
 

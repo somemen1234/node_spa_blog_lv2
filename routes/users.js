@@ -33,7 +33,7 @@ router.post("/signup", async (req, res) => {
       return;
     }
 
-    const existUser = await User.findOne({ nickname: nickname });
+    const existUser = await User.findOne({ nickname });
     if (existUser) {
       res.status(412).json({
         success: false,
