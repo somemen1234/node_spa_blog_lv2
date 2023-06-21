@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../schemas/user.js");
 
 //회원가입 API
-router.post("/users", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { nickname, password, confirmPassword } = req.body;
     let nicknameReg = new RegExp(/^[\w]{3,12}$/g);
