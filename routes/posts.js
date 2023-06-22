@@ -33,7 +33,7 @@ router.get("/posts", async (_, res) => {
 });
 
 //게시글 등록하기
-//모든 정보 입력하도록 validation check
+//현재 로그인된 유저id와 유저 닉네임을 db에 저장해서 누가 게시글에 작성을 했는지 알 수 있도록 구현
 router.post("/posts", authMiddleware, async (req, res) => {
   try {
     const user = res.locals.user;
@@ -79,6 +79,7 @@ router.get("/posts/:postId", checkObjectId, async (req, res) => {
 });
 
 //게시글 수정
+//현재 로그인된 id를 비교해서 같다면 수정을 할 수 있도록 구현
 router.put("/posts/:postId", checkObjectId, authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
@@ -115,6 +116,7 @@ router.put("/posts/:postId", checkObjectId, authMiddleware, async (req, res) => 
 });
 
 //게시글 삭제
+//현재 로그인된 id를 비교해서 같다면 삭제를 할 수 있도록 구현
 router.delete("/posts/:postId", checkObjectId, authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;

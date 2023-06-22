@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require("../schemas/user.js");
 
 //회원가입 API
+//정규형을 통해 3~12자리의 숫자와 영어만 올수 있도록 설정
 router.post("/signup", async (req, res) => {
   try {
     const { nickname, password, confirmPassword } = req.body;

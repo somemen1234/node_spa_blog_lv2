@@ -42,6 +42,7 @@ router.get("/posts/:postId/comments", checkObjectId, async (req, res) => {
 });
 
 //댓글 작성
+//댓글 작성 시, 로그인된 아이디와 닉네임도 함께 저장해서 누가 작성한 댓글인지 확인할 수 있도록 구현
 router.post("/posts/:postId/comments", checkObjectId, authMiddleware, async (req, res) => {
   try {
     const { userId } = res.locals.user;
@@ -68,6 +69,8 @@ router.post("/posts/:postId/comments", checkObjectId, authMiddleware, async (req
 });
 
 //댓글 수정
+//로그인된 id와 작성한 댓글의 id가 같다면 수정을 할 수 있도록 구현
+//다른 postId를 입력했을 때에 댓글이 수정이 되지 않도록 구현
 router.put("/posts/:postId/comments/:commentId", authMiddleware, async (req, res) => {
   try {
     const { userId } = res.locals.user;
@@ -114,6 +117,7 @@ router.put("/posts/:postId/comments/:commentId", authMiddleware, async (req, res
 });
 
 //댓글 삭제
+//로그인된 id와 작성한 댓글의 id가 같다면 삭제를 할 수 있도록 구현
 router.delete("/posts/:postId/comments/:commentId", authMiddleware, async (req, res) => {
   try {
     const { userId } = res.locals.user;

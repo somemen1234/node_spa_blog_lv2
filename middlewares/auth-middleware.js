@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/user.js");
 
+//인증 미들웨어 구현
+//유저 Id와 유저 닉네임을 사용하기 위해 res.locals.user/userNickname을 할당
 module.exports = async (req, res, next) => {
   try {
     const { Authorization } = req.cookies;

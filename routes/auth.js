@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require("../schemas/user.js");
 const jwt = require("jsonwebtoken");
 
+//로그인 구현
+//토큰 만료시간은 1시간으로 설정했음(expiresIn: '1h')
 router.post("/login", async (req, res) => {
   try {
     const { nickname, password } = req.body;
