@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 //Comments에 들어가는 인스턴스 모델 설정
-const commentsSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
@@ -17,6 +17,6 @@ const commentsSchema = new mongoose.Schema({
   },
 });
 //인스턴스 생성 시, 생성일자와 수정일자를 같이 저장하기 위해 set
-commentsSchema.set("timestamps", true);
+commentSchema.set("timestamps", true);
 
-module.exports = mongoose.model("Comments", commentsSchema);
+module.exports = mongoose.model("Comment", commentSchema);

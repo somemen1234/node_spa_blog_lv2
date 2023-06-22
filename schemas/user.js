@@ -18,5 +18,6 @@ UserSchema.virtual("userId").get(function () {
 UserSchema.set("toJSON", {
   virtuals: true,
 });
+UserSchema.set("timestamps", true);
 
 module.exports = mongoose.model("User", UserSchema);

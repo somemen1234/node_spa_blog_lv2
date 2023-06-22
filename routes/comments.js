@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 //exports 시, 객체로 내보냈기 때문에 받을 때에도 객체로 받아야 함.
-const { checkObjectId } = require("./posts.js");
 const Comment = require("../schemas/comment.js");
 const Post = require("../schemas/post.js");
 const authMiddleware = require("../middlewares/auth-middleware.js");
+const checkObjectId = require("../middlewares/validation-check-middleware.js");
 //ObjectId의 타입을 활용하기 위해 할당
 const { ObjectId } = require("mongoose").Types;
 
