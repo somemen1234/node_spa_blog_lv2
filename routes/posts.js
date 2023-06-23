@@ -28,7 +28,7 @@ router.get("/posts", async (_, res) => {
 
     res.status(200).json({ success: true, posts: results });
   } catch (error) {
-    return res.status(400).json({ success: false, errorMessage: "게시글 조회에 실패하였습니다." });
+    return res.status(400).json({ success: false, errorMessage: "게시글 조회에 실패했습니다." });
   }
 });
 
@@ -99,9 +99,10 @@ router.put("/posts/:postId", checkObjectId, authMiddleware, async (req, res) => 
         .json({ success: false, errorMessage: "게시글 수정 권한이 존재하지 않습니다." });
 
     if (!title || !content)
-      return res
-        .status(412)
-        .json({ success: false, errorMessage: "게시글 제목이나 내용이 빈 내용인지 확인해 주세요" });
+      return res.status(412).json({
+        success: false,
+        errorMessage: "게시글 제목이나 내용이 빈 내용인지 확인해 주세요.",
+      });
 
     await Post.updateOne(
       { _id: postId },

@@ -87,10 +87,14 @@ router.put("/posts/:postId/comments/:commentId", authMiddleware, async (req, res
     const existPost = await Post.findById(postId);
 
     if (!existPost)
-      return res.status(404).json({ success: false, errorMessage: "게시글이 존재하지 않습니다." });
+      return res
+        .status(404)
+        .json({ success: false, errorMessage: "해당 게시글을 찾을 수 없습니다." });
 
     if (!existComment)
-      return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
+      return res
+        .status(404)
+        .json({ success: false, errorMessage: "해당 댓글이 존재하지 않습니다." });
 
     if (postId !== existComment.postId)
       return res.status(404).json({
@@ -133,10 +137,14 @@ router.delete("/posts/:postId/comments/:commentId", authMiddleware, async (req, 
     const existPost = await Post.findById(postId);
 
     if (!existPost)
-      return res.status(404).json({ success: false, errorMessage: "게시글이 존재하지 않습니다." });
+      return res
+        .status(404)
+        .json({ success: false, errorMessage: "해당 게시글을 찾을 수 없습니다." });
 
     if (!existComment)
-      return res.status(404).json({ success: false, errorMessage: "댓글이 존재하지 않습니다." });
+      return res
+        .status(404)
+        .json({ success: false, errorMessage: "해당 댓글이 존재하지 않습니다." });
 
     if (postId !== existComment.postId)
       return res.status(404).json({
